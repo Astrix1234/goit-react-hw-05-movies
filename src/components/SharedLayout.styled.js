@@ -26,8 +26,13 @@ export const Link = styled(NavLink)`
   text-decoration: none;
   color: black;
   font-weight: 700;
+  transition: color 0.3s ease-in-out;
 
   &.active {
     color: red;
+  }
+
+  &:hover {
+    color: blue;
   }
 `;

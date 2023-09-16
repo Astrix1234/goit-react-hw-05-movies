@@ -15,7 +15,7 @@ export const fetchMovieCredits = async movieId => {
     const data = await response.json();
     return data.cast;
   } catch (err) {
-    console.error('Error fetching movie details:', err);
+    console.error('Error fetching movie cast:', err);
     return [];
   }
 };
