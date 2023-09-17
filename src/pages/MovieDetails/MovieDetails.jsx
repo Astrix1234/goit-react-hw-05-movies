@@ -16,14 +16,24 @@ const MovieDetails = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       const movieData = await fetchMovieDetails(id);
-      //   console.log(movieData);
+      // console.log(movieData);
       setMovie(movieData);
     };
 
     fetchDetails();
   }, [id]);
 
-  const backLinkHref = location.state?.from ?? '/';
+  useEffect(() => {
+    if (location.state && location.state?.from) {
+      sessionStorage.setItem('movieDetailsBackLink', location.state.from);
+    }
+
+    return () => {
+      sessionStorage.removeItem('movieDetailsBackLink');
+    };
+  }, [location.state]);
+
+  const backLinkHref = sessionStorage.getItem('movieDetailsBackLink') || '/';
 
   if (!movie) return <div>Loading...</div>;
 
