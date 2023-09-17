@@ -1,14 +1,19 @@
 import { Input, Button } from './SearchBox.styled';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export const SearchBox = ({ onSubmit }) => {
-  const [inputValue, setInputValue] = useState('');
+export const SearchBox = ({ onSubmit, inputValue: initialInputValue }) => {
+  const [inputValue, setInputValue] = useState(initialInputValue);
+
+  useEffect(() => {
+    setInputValue(initialInputValue);
+  }, [initialInputValue]);
 
   const handleFormSubmit = e => {
     e.preventDefault();
     onSubmit(inputValue);
   };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <Input
@@ -23,4 +28,9 @@ export const SearchBox = ({ onSubmit }) => {
 
 SearchBox.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  inputValue: PropTypes.string,
+};
+
+SearchBox.defaultProps = {
+  inputValue: '',
 };
