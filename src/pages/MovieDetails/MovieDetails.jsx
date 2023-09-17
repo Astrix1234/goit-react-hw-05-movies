@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import { fetchMovieDetails } from '../Api/getMovieDetails';
-import { BackLink } from '../components/StyledLink';
+import React, { useEffect, useState, Suspense } from 'react';
+import { fetchMovieDetails } from '../../Api/getMovieDetails';
+import { BackLink } from '../../components/StyledLink/StyledLink';
 import {
   Container,
   ContainerDescription,
@@ -61,7 +61,9 @@ const MovieDetails = () => {
           </li>
         </ul>
       </AdditionalInformation>
-      <Outlet />
+      <Suspense fallback={<div>Loading subpage...</div>}>
+        <Outlet />
+      </Suspense>
     </main>
   );
 };

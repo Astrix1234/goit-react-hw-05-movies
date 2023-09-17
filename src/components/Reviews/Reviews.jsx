@@ -4,15 +4,21 @@ import { fetchMovieReviews } from 'Api/getMovieReviews';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     (async () => {
       const movieReviews = await fetchMovieReviews(id);
-      //   console.log(movieReviews);
+
       setReviews(movieReviews);
+      setIsLoading(false);
     })();
   }, [id]);
+
+  if (isLoading) {
+    return <p>Loading reviews...</p>;
+  }
 
   return (
     <ul>
