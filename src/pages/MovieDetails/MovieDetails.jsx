@@ -11,41 +11,41 @@ import {
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     const fetchDetails = async () => {
       const movieData = await fetchMovieDetails(id);
-      // console.log(movieData);
+      //   console.log(movieData);
       setMovie(movieData);
+      setIsLoading(false);
     };
 
     fetchDetails();
   }, [id]);
 
-  useEffect(() => {
-    if (location.state && location.state?.from) {
-      sessionStorage.setItem('movieDetailsBackLink', location.state.from);
-    }
+  const backLinkHref = location.state?.from ?? '/';
 
-    return () => {
-      sessionStorage.removeItem('movieDetailsBackLink');
-    };
-  }, [location.state]);
-
-  const backLinkHref = sessionStorage.getItem('movieDetailsBackLink') || '/';
-
-  if (!movie) return <div>Loading...</div>;
+  if (isLoading) {
+    return <p>Loading cast...</p>;
+  }
 
   return (
     <main>
       <BackLink to={backLinkHref}>Go back</BackLink>
       <Container>
         <div>
-          <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
-          />
+          {movie.poster_path ? (
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+            />
+          ) : (
+            <div style={{ marginTop: '30px' }}>
+              Unfortunately, the film's poster is not available
+            </div>
+          )}
         </div>
         <ContainerDescription>
           <h1>{movie.title}</h1>
@@ -64,10 +64,14 @@ const MovieDetails = () => {
         <p>Additional information</p>
         <ul>
           <li>
-            <Link to="cast">Cast</Link>
+            <Link to="cast" state={{ from: location.state?.from }}>
+              Cast
+            </Link>
           </li>
           <li>
-            <Link to="reviews">Reviews</Link>
+            <Link to="reviews" state={{ from: location.state?.from }}>
+              Reviews
+            </Link>
           </li>
         </ul>
       </AdditionalInformation>
